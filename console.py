@@ -51,8 +51,6 @@ class HBNBCommand(cmd.Cmd):
                 k = split_param[0]
                 print(type(k))
                 v = split_param[1]
-                if "\"" in v:
-                    v = v.strip("\"")
                 if "_" in v:
                     phrase = v.split('_')
                     convertedspace = ' '.join(phrase)
