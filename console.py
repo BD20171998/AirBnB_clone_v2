@@ -49,12 +49,14 @@ class HBNBCommand(cmd.Cmd):
                 param = my_list[i]
                 split_param = param.split("=")
                 k = split_param[0]
+                print(type(k))
                 v = split_param[1]
+                if "\"" in v:
+                    v = v.strip("\"")
                 if "_" in v:
                     phrase = v.split('_')
                     convertedspace = ' '.join(phrase)
                     v = convertedspace
-
                 if obj in HBNBCommand.all_classes:
                     setattr(obj, k, v)
                 i += 1
