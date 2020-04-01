@@ -42,7 +42,7 @@ class DBStorage:
         if cls is None:
 
             for cls in classes:
-
+                ##check for existing classes
                 all_recs = self.__session.query(cls).all()
 
                 for i in all_recs:
