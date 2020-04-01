@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """This is the state class"""
-from models.base_model import Base
+
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
+from models.base_model import Base
 
 
 from sqlalchemy import Column, String
@@ -22,7 +22,7 @@ class State(BaseModel, Base):
 
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="all, delete",)
+    cities = relationship("City", backref="state", cascade="all, delete")
 
 
     @property
