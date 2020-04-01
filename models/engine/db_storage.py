@@ -37,28 +37,17 @@ class DBStorage:
         This returns all or one specific class object based on user's input as a 
         dictionary
         """
-        classes = ['User', 'State', 'City', 'Amenity', 'Place', 'Review']
-        if cls is None:
-
-            for cls in classes:
-                all_recs = self.__session.query(cls).all()
-                for i in all_recs:
-                    key = i.__name__ + getattr(i,i.id)
-                    value = i # or is it i.__dict__
-                    self.__all.update({key:value})
-
-            return self.__all
-
+        print(type(cls))
+        if cls:
+            pass
         else:
-
-            fil_recs =  self.__session.query(cls).all()
-
-            for value in fil_recs:
-                key = value.__name__ + getattr(value,value.id)
-                #or is it val = value.__dict__
-                self.__filtered.update({key:value})
-
-            return self.__filtered
+            classes = [State]
+            spec_recs = {}
+            for cls in classes:
+                for rows in self.__session.query(cls).all():
+                    key = "{}.{}".format(rows.__class__.__name__, rows.id)
+                    spec_recs[key] = rows
+        return all_recs
 
     def new(self, obj):
         """Adds given object to DB session"""
