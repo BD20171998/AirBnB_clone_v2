@@ -16,6 +16,7 @@ class State(BaseModel, Base):
     """
 
     """This init method allows the class to access BaseModel's attributes"""
+
     def __init__(self):
         BaseModel.__init__(self)
 
@@ -23,14 +24,14 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
     cities = relationship("City", backref="state", cascade="all, delete",)
 
+
     @property
     def cities(self):
         """
         Returns the list of City instances with state_id equals to the current
         State.id as private
         """
-        #session.query(State, City).filter(City.state_id == State.id).all()
-
-        results = self.storage.all()
-        print(results)
-        return self.__results
+        c_list = []
+        for city_id, value in models.storage.all(City).items():
+            if city_id.state_id == self.id:
+                return c_list.append(value)
