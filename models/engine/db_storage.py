@@ -8,7 +8,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-
+import sys
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -34,29 +34,43 @@ class DBStorage:
 
     def all(self, cls=None):
         """
-        This returns all or one specific class object based on user's input as a 
+        This returns all or one specific class object based on user's input as a
         dictionary
         """
-        classes = ['User', 'State', 'City', 'Amenity', 'Place', 'Review']
+        classes = [User, State, City, Amenity, Place, Review]
+
         if cls is None:
 
             for cls in classes:
+
                 all_recs = self.__session.query(cls).all()
+
                 for i in all_recs:
-                    key = i.__name__ + getattr(i,i.id)
-                    value = i # or is it i.__dict__
-                    self.__all.update({key:value})
+
+                    key = i.__class__.__name__ + "." + i.id
+
+                    if '_sa_instance_state' in i.__dict__.keys():
+                        del i.__dict__['_sa_instance_state']
+
+                    value = i.__dict__
+
+                    self.__all[key]=value
 
             return self.__all
 
         else:
 
-            fil_recs =  self.__session.query(cls).all()
+            fil_recs =  self.__session.query(eval(cls)).all()
 
             for value in fil_recs:
-                key = value.__name__ + getattr(value,value.id)
-                #or is it val = value.__dict__
-                self.__filtered.update({key:value})
+
+                key = value.__class__.__name__ + "." + value.id
+
+                if '_sa_instance_state' in value.__dict__.keys():
+                        del value.__dict__['_sa_instance_state']
+
+                val = value.__dict__
+                self.__filtered[key] = val
 
             return self.__filtered
 

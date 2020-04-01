@@ -59,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
                     convertedspace = ' '.join(phrase)
                     v = convertedspace
 
-                if my_list[0] in HBNBCommand.all_classes:
+                if my_list[0] in HBNBCommand.all_classes and hasattr(obj, k) is True:
                     setattr(obj, k, v)
 
                 i += 1
@@ -139,7 +139,13 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
-        objects = storage.all()
+
+        if not line:
+            objects = storage.all()
+
+        else:
+            objects = storage.all(line)
+
         my_list = []
         if not line:
             for key in objects:
