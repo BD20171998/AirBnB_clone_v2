@@ -16,9 +16,6 @@ class Review(BaseModel, Base):
 
     """This init method allows the class to access BaseModel's attributes"""
 
-    def __init__(self):
-        BaseModel.__init__(self)
-
     __tablename__ = "reviews"
 
     place_id = Column(String(60),ForeignKey("places.id"), nullable=False)

@@ -45,18 +45,19 @@ class Place(BaseModel, Base):
     # took out back_populates, see if it is needed
     amenities = relationship("Amenity", secondary="place_amenity", viewonly=False)
 
-    @property
-    def reviews(self):
-        """
-        Returns the list of Review instances with place_id equals to the current
-        Place.id as private
-        """
-        c_list = []
-        for key, value in models.storage.all(Review).items():
-            if key.place_id == self.id:
-                return c_list.append(value)
-
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
+
+        @property
+        def reviews(self):
+            """
+            Returns the list of Review instances with place_id equals to the current
+            Place.id as private
+            """
+            c_list = []
+            for key, value in models.storage.all(Review).items():
+                if key.place_id == self.id:
+                    return c_list.append(value)
+
         @property
         def amenities(self):
             """
