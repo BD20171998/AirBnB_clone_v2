@@ -10,8 +10,10 @@ from os import getenv
 
 
 link_table = Table("place_amenity", Base.metadata,
-                   Column("place_id", String(60), ForeignKey("places.id"), primary_key=True, nullable=False),
-                   Column("amenity_id", String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False))
+                   Column("place_id", String(60), ForeignKey("places.id"),
+                          primary_key=True, nullable=False),
+                   Column("amenity_id", String(60), ForeignKey("amenities.id"),
+                          primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -36,21 +38,22 @@ class Place(BaseModel, Base):
     description = Column(String(1024))
     number_rooms = Column(Integer, default=0, nullable=False)
     number_bathrooms = Column(Integer, default=0, nullable=False)
-    max_guest =  Column(Integer, default=0, nullable=False)
+    max_guest = Column(Integer, default=0, nullable=False)
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
     reviews = relationship("Review", backref="place", cascade="all, delete")
     # took out back_populates, see if it is needed
-    amenities = relationship("Amenity", secondary="place_amenity", backref="Places", viewonly=False)
+    amenities = relationship("Amenity", secondary="place_amenity",
+                             backref="Places", viewonly=False)
 
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
 
         @property
         def reviews(self):
             """
-            Returns the list of Review instances with place_id equals to the current
+            Returns the list of Review instances with place_id == current
             Place.id as private
             """
             c_list = []
@@ -61,7 +64,7 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """
-            Returns list of Amenity instances based on the attribute amenity_ids
+            Returns list of Amenity instances based on attribute amenity_ids
             that contains all Amenity.id linked to the Place
             """
             a_list = []
