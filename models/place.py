@@ -2,13 +2,16 @@
 """This is the place class"""
 from models.base_model import BaseModel
 from models.base_model import Base
+from models.city import City
+from models.user import User
 from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
+from os import getenv
 
 
 link_table = Table("place_amenity", Base.metadata,
-                   Column("place_id", ForeignKey("places.id"), nullable=False),
-                   Column("amenity_id", ForeignKey("amenities.id"), nullable=False))
+                   Column("place_id", String(60), ForeignKey("places.id"), primary_key=True, nullable=False),
+                   Column("amenity_id", String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -40,7 +43,7 @@ class Place(BaseModel, Base):
     amenity_ids = []
     reviews = relationship("Review", backref="place", cascade="all, delete")
     # took out back_populates, see if it is needed
-    amenities = relationship("Amenity", secondary=link_table, viewonly=False)
+    amenities = relationship("Amenity", secondary="place_amenity", viewonly=False)
 
     @property
     def reviews(self):
@@ -53,25 +56,24 @@ class Place(BaseModel, Base):
             if key.place_id == self.id:
                 return c_list.append(value)
 
-    @property
-    # Getter
-    # once data from setter gets to the getter, (which is the amenity_id)
-    def amenities(self):
-        """
-        Returns list of Amenity instances based on the attribute amenity_ids
-        that contains all Amenity.id linked to the Place
-        """
-        a_list = []
-        for key, value in models.storage.all(Amenity).items():
-            if key.amenity_ids == self.id:
-                return a_list.append(value)
+    if getenv("HBNB_TYPE_STORAGE", None) != "db":
+        @property
+        def amenities(self):
+            """
+            Returns list of Amenity instances based on the attribute amenity_ids
+            that contains all Amenity.id linked to the Place
+            """
+            a_list = []
+            for key in models.storage.all(Amenity):
+                if key.id in self.amenity_ids:
+                    return a_list.append(key)
 
-    @amenities.setter
-    def amenities(self, value):
-        """
-        Handles append method for adding an Amenity.id to the attribute
-        amenity_ids. This method should accept only Amenity object,
-        otherwise, do nothing
-        """
-        if type(value) is Amenity:
-            self.amenity_ids.append(value.id)
+        @amenities.setter
+        def amenities(self, value):
+            """
+            Handles append method for adding an Amenity.id to the attribute
+            amenity_ids. This method should accept only Amenity object,
+            otherwise, do nothing
+            """
+            if type(value) is Amenity:
+                self.amenity_ids.append(value.id)
