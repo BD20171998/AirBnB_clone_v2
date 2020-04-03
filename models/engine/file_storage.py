@@ -29,12 +29,12 @@ class FileStorage:
              for k,v in self.__objects.items():
                  split_id = k.split(".")
 
-                 if split_id[0] == type(cls):
+                 if split_id[0] == cls.__name__:
                      self.__filtered.update({k:v})
 
              return self.__filtered
 
-def new(self, obj):
+    def new(self, obj):
         """sets __object to given obj
         Args:
             obj: given object
