@@ -8,6 +8,8 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+
+
 class FileStorage:
     """This class serializes instances to a JSON file and
     deserializes JSON file to instances
@@ -17,7 +19,7 @@ class FileStorage:
     """
     __file_path = "file.json"
     __objects = {}
-    __filtered = {}
+
     def all(self, cls=None):
         """returns a dictionary
         Return:
@@ -26,13 +28,13 @@ class FileStorage:
         if cls is None:
             return self.__objects
         else:
-             for k,v in self.__objects.items():
-                 split_id = k.split(".")
-
-                 if split_id[0] == cls.__name__:
-                     self.__filtered.update({k:v})
-
-             return self.__filtered
+            #  keep running into string error
+            if type(cls) == str:
+                cls = eval(cls)
+            for k, v in self.__objects.items():
+                if type(v) == cls:
+                    self.__objects[k] = v
+            return self.__objects
 
     def new(self, obj):
         """sets __object to given obj
@@ -42,6 +44,7 @@ class FileStorage:
         if obj:
             key = "{}.{}".format(type(obj).__name__, obj.id)
             self.__objects[key] = obj
+
     def save(self):
         """serialize the file path to JSON file path
         """
@@ -50,6 +53,7 @@ class FileStorage:
             my_dict[key] = value.to_dict()
         with open(self.__file_path, 'w', encoding="UTF-8") as f:
             json.dump(my_dict, f)
+
     def reload(self):
         """serialize the file path to JSON file path
         """
@@ -60,6 +64,7 @@ class FileStorage:
                     self.__objects[key] = value
         except FileNotFoundError:
             pass
+
     def delete(self, obj=None):
         """Delete obj from __objects if it’s inside
         """
