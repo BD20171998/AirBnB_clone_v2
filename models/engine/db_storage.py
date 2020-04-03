@@ -67,10 +67,12 @@ class DBStorage:
                 key = value.__class__.__name__ + "." + value.id
 
                 if '_sa_instance_state' in value.__dict__.keys():
-                        del value.__dict__['_sa_instance_state']
+                    del value.__dict__['_sa_instance_state']
 
                 val = value.__dict__
-                self.__filtered[key] = val
+
+                #self.__filtered[key] = val
+                self.__filtered.update({key:val})
 
             return self.__filtered
 
