@@ -19,6 +19,7 @@ class FileStorage:
     """
     __file_path = "file.json"
     __objects = {}
+    __filtered = {}
 
     def all(self, cls=None):
         """returns a dictionary
@@ -27,14 +28,17 @@ class FileStorage:
         """
         if cls is None:
             return self.__objects
-        else:
+        elif cls is not None:
             #  keep running into string error
             if type(cls) == str:
                 cls = eval(cls)
+
             for k, v in self.__objects.items():
+
                 if type(v) == cls:
-                    self.__objects[k] = v
-            return self.__objects
+                    self.__filtered[k] = v
+
+            return self.__filtered
 
     def new(self, obj):
         """sets __object to given obj
