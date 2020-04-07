@@ -20,11 +20,12 @@ def do_deploy(archive_path):
     basename = os.path.basename(archive_path)
     root, ext = os.path.splitext(basename)
     target = '/data/web_static/releases/{}'.format(root)
+
     try:
         put(archive_path, "/tmp/")
         run("sudo mkdir -p {}/".format(target))
-        run("sudo tar -xzf /tmp/{} -C {}/".format(root, target))
-        run("sudo rm /tmp/{}".format(root))
+        run("sudo tar -xzf /tmp/{} -C {}/".format(basename, target))
+        run("sudo rm /tmp/{}".format(basename))
         run("sudo mv {}/web_static/* {}/".format(target, target))
         run("sudo rm -rf {}/web_static".format(target))
         run("sudo rm -rf /data/web_static/current")
