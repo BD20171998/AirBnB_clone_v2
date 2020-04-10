@@ -7,7 +7,7 @@ from fabric.contrib import files
 import os.path
 from datetime import datetime
 
-@runs_once
+
 def do_pack():
     """do pack script for compressing
     """
@@ -20,15 +20,15 @@ def do_pack():
         return None
 
     else:
-        return check
+        return path
 
 env.user = "ubuntu"
 env.hosts = ['104.196.182.248', '3.95.214.115']
 
+
 def do_deploy(archive_path):
     """ Transfers archive_path to web servers above
-    """                                                                                                                  
-
+    """
     if not os.path.isfile(archive_path):
         return False
 
@@ -53,14 +53,16 @@ def do_deploy(archive_path):
     else:
         return True
 
+
 def deploy():
     """
-    Fabric script (based on the file 2-do_deploy_web_static.py) that creates and
-    distributes an archive to your web servers, using the function deploy
+    Fabric script (based on the file 2-do_deploy_web_static.py) that creates
+    and distributes an archive to your web servers, using the function deploy
     """
 
     filepath = do_pack()
 
     if filepath is None:
         return False
+
     return do_deploy(filepath)
