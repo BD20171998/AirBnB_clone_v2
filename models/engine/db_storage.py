@@ -49,8 +49,8 @@ class DBStorage:
 
                     key =  str(i.__class__.__name__) + "." + str(i.id)
 
-                    if '_sa_instance_state' in i.__dict__.keys():
-                        del i.__dict__['_sa_instance_state']
+#                    if '_sa_instance_state' in i.__dict__.keys():
+#                        del i.__dict__['_sa_instance_state']
 
                     self.__all[key] = i
 
@@ -67,8 +67,8 @@ class DBStorage:
 
                 key =  str(value.__class__.__name__) + "." + str(value.id)
 
-                if '_sa_instance_state' in value.__dict__.keys():
-                    del value.__dict__['_sa_instance_state']
+#                if '_sa_instance_state' in value.__dict__.keys():
+#                    del value.__dict__['_sa_instance_state']
 
                 self.__filtered[key] = value
 
@@ -102,4 +102,5 @@ class DBStorage:
 
     def close(self):
         """Removes session when needed"""
-        self.__session.remove()
+        #self.__session.remove()
+        self.__session.close()
