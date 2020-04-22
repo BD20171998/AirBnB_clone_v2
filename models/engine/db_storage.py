@@ -47,14 +47,12 @@ class DBStorage:
 
                 for i in all_recs:
 
-                    key = i.__class__.__name__ + "." + i.id
+                    key =  str(i.__class__.__name__) + "." + str(i.id)
 
                     if '_sa_instance_state' in i.__dict__.keys():
                         del i.__dict__['_sa_instance_state']
 
-                    value = i.__dict__
-
-                    self.__all[key]=value
+                    self.__all[key] = i
 
             return self.__all
 
@@ -64,15 +62,12 @@ class DBStorage:
 
             for value in fil_recs:
 
-                key = value.__class__.__name__ + "." + value.id
+                key =  str(value.__class__.__name__) + "." + str(value.id)
 
                 if '_sa_instance_state' in value.__dict__.keys():
                     del value.__dict__['_sa_instance_state']
 
-                val = value.__dict__
-
-                #self.__filtered[key] = val
-                self.__filtered.update({key:val})
+                self.__filtered[key] = value
 
             return self.__filtered
 
@@ -90,7 +85,7 @@ class DBStorage:
         """
         try:
             Base.metadata.create_all(self.__engine)
-            session_factory = sessionmaker(bind=self.__enginge, expire_on_commit=False)
+            session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
             Session = scoped_session(sessiobn_factory)
             self.__session = Session
         except:

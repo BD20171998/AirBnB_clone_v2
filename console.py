@@ -11,7 +11,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from shlex import split
-
+from os import getenv
 
 class HBNBCommand(cmd.Cmd):
     """this class is entry point of the command interpreter
@@ -147,20 +147,30 @@ class HBNBCommand(cmd.Cmd):
             objects = storage.all(line)
 
         my_list = []
+
         if not line:
+
             for key in objects:
                 my_list.append(objects[key])
+
             print(my_list)
             return
+
         try:
             args = line.split(" ")
+
             if args[0] not in self.all_classes:
                 raise NameError()
+
             for key in objects:
+
                 name = key.split('.')
+
                 if name[0] == args[0]:
                     my_list.append(objects[key])
+
             print(my_list)
+
         except NameError:
             print("** class doesn't exist **")
 
