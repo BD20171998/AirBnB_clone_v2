@@ -57,8 +57,11 @@ class DBStorage:
             return self.__all
 
         else:
+            if (isinstance(cls, str)):
+                fil_recs =  self.__session.query(eval(cls)).all()
 
-            fil_recs =  self.__session.query(eval(cls)).all()
+            else:
+                fil_recs =  self.__session.query(cls).all()
 
             for value in fil_recs:
 
