@@ -13,6 +13,7 @@ from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+
 class DBStorage:
     """This class saves data to a MySQL database"""
 
@@ -24,7 +25,12 @@ class DBStorage:
     def __init__(self):
         """Instantiation of DBStorage class"""
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(getenv('HBNB_MYSQL_USER'), getenv('HBNB_MYSQL_PWD'), getenv('HBNB_MYSQL_HOST'), getenv('HBNB_MYSQL_DB')), pool_pre_ping=True)
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
+                                      .format(getenv('HBNB_MYSQL_USER'),
+                                              getenv('HBNB_MYSQL_PWD'),
+                                              getenv('HBNB_MYSQL_HOST'),
+                                              getenv('HBNB_MYSQL_DB')),
+                                      pool_pre_ping=True)
 
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
@@ -34,23 +40,20 @@ class DBStorage:
 
     def all(self, cls=None):
         """
-        This returns all or one specific class object based on user's input as a
-        dictionary
+        This returns all or one specific class object based on user's input as
+        a dictionary
         """
         classes = [User, State, City, Amenity, Place, Review]
 
         if cls is None:
 
             for cls in classes:
-                ##check for existing classes
+
                 all_recs = self.__session.query(cls).all()
 
                 for i in all_recs:
 
-                    key =  str(i.__class__.__name__) + "." + str(i.id)
-
-#                    if '_sa_instance_state' in i.__dict__.keys():
-#                        del i.__dict__['_sa_instance_state']
+                    key = str(i.__class__.__name__) + "." + str(i.id)
 
                     self.__all[key] = i
 
@@ -58,17 +61,14 @@ class DBStorage:
 
         else:
             if (isinstance(cls, str)):
-                fil_recs =  self.__session.query(eval(cls)).all()
+                fil_recs = self.__session.query(eval(cls)).all()
 
             else:
-                fil_recs =  self.__session.query(cls).all()
+                fil_recs = self.__session.query(cls).all()
 
             for value in fil_recs:
 
-                key =  str(value.__class__.__name__) + "." + str(value.id)
-
-#                if '_sa_instance_state' in value.__dict__.keys():
-#                    del value.__dict__['_sa_instance_state']
+                key = str(value.__class__.__name__) + "." + str(value.id)
 
                 self.__filtered[key] = value
 
@@ -77,7 +77,6 @@ class DBStorage:
     def new(self, obj):
         """Adds given object to DB session"""
         self.__session.add(obj)
-
 
     def save(self):
         """saves the current session to the MySQL database"""
@@ -88,7 +87,8 @@ class DBStorage:
         """
         try:
             Base.metadata.create_all(self.__engine)
-            session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+            session_factory = sessionmaker(bind=self.__engine,
+                                           expire_on_commit=False)
             Session = scoped_session(sessiobn_factory)
             self.__session = Session
         except:
@@ -102,5 +102,4 @@ class DBStorage:
 
     def close(self):
         """Removes session when needed"""
-        #self.__session.remove()
         self.__session.close()
