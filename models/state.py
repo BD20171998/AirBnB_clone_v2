@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """This is the state class"""
 
+import models
 from models.base_model import BaseModel
 from models.base_model import Base
-
 from os import getenv
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+
 
 class State(BaseModel, Base):
     """This is the class for State
@@ -26,10 +27,16 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """
-            Returns the list of City instances with state_id equals to the current
-            State.id as private
+            Returns the list of City instances with state_id equals to the
+            current State.id as private
             """
             c_list = []
-            for city_id, value in models.storage.all(City).items():
-                if city_id.state_id == self.id:
-                    return c_list.append(value)
+
+            all_cities = models.storage.all("City")
+
+            for key, value in all_cities.items():
+
+                if value.__dict__.get('state_id') == self.id:
+                    c_list.append(value)
+
+            return (c_list)
