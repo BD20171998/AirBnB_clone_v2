@@ -9,11 +9,14 @@ from sqlalchemy.orm import relationship
 from os import getenv
 
 
-link_table = Table("place_amenity", Base.metadata,
-                   Column("place_id", String(60), ForeignKey("places.id"),
-                          primary_key=True, nullable=False),
-                   Column("amenity_id", String(60), ForeignKey("amenities.id"),
-                          primary_key=True, nullable=False))
+link_table = Table("place_amenity",
+                   Base.metadata,
+                   Column("place_id",
+                          String(60),
+                          ForeignKey("places.id")),
+                   Column("amenity_id",
+                          String(60),
+                          ForeignKey("amenities.id")))
 
 
 class Place(BaseModel, Base):
@@ -46,7 +49,7 @@ class Place(BaseModel, Base):
     reviews = relationship("Review", backref="place", cascade="all, delete")
     # took out back_populates, see if it is needed
     amenities = relationship("Amenity", secondary="place_amenity",
-                             backref="Places", viewonly=False)
+                             viewonly=False)
 
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
 
