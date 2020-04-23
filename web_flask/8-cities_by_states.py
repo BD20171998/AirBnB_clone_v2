@@ -8,10 +8,9 @@ from models import storage, State
 from flask import escape
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 
 
-@app.route('/cities_by_states')
+@app.route('/cities_by_states', strict_slashes=False)
 def show_cities():
     '''Dictionary: of Cities'''
     city_dict = storage.all(State)
