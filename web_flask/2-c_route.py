@@ -2,7 +2,7 @@
 
 
 """utilizing Flask for Web app frame work"""
-from flask import Flask, escape
+from flask import Flask
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -23,7 +23,7 @@ def hbnb():
 @app.route('/c/<text>')
 def show_text(text):
     """method that defines '/c/' route for Flask app that uses a variable"""
-    return 'C %s' % escape(text)
+    return "C {}".format(text.replace('_', ' '))
 
 if __name__ == "__main__":
     app.run(host="localhost", port=5000)

@@ -23,14 +23,14 @@ def hbnb():
 @app.route('/c/<text>')
 def show_text(text):
     """method that defines '/c/' route that uses a variable"""
-    return 'C %s' % escape(text)
+    return 'C {}'.format(text.replace('_', ' '))
 
 
 @app.route('/python/')
 @app.route('/python/<text>')
 def show_text2(text="is cool"):
     """method that defines '/python/' route that uses a variable"""
-    return 'Python %s' % escape(text)
+    return 'Python {}'.format(text.replace('_', ' '))
 
 
 if __name__ == "__main__":
