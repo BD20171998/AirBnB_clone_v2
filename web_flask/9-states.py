@@ -16,7 +16,8 @@ def show_states(state_id=None):
 
     if state_id is None:
         state_dict = storage.all(State)
-        return render_template('9-states.html', state_dict=state_dict)
+        return render_template('9-states.html', state_id=state_id,
+                               state_dict=state_dict)
 
     else:
         city_list = []
