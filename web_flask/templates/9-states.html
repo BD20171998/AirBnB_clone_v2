@@ -6,13 +6,13 @@
     <BODY>
         {% if not state_id %}
 	<H1>States</H1>
-	{% for state in state_dict.values()|sort(attribute="name") %}
+	{% for state in all_states.values()|sort(attribute="name") %}
         <UL>
 	  <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
 	</UL>
 	{% endfor %}
 
-	{% elif city_list %}
+	{% elif state_id and single_state %}
         <H1>State: {{ single_state.name }}</H1>
         <H3>Cities:</H3>
 	 {% for i in city_list|sort(attribute="name") %}

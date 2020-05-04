@@ -14,27 +14,28 @@ app = Flask(__name__)
 def show_states(state_id=None):
     """Dictionary of states"""
 
+    city_list = []
+    all_cities = storage.all(City)
+    all_states = storage.all(State)
+    single_state = None
+
     if state_id is None:
-        state_dict = storage.all(State)
         return render_template('9-states.html', state_id=state_id,
-                               state_dict=state_dict)
+                               all_states=all_states)
 
     else:
-        city_list = []
-        all_cities = storage.all(City)
-        all_states = storage.all(State)
 
         for key, value in all_cities.items():
 
             if value.__dict__.get('state_id') == state_id:
-                    city_list.append(value)
+                city_list.append(value)
 
         for key, value in all_states.items():
             if value.__dict__.get('id') == state_id:
                 single_state = value
 
         return render_template('9-states.html', city_list=city_list,
-                               single_state=single_state)
+                               single_state=single_state, state_id=state_id)
 
 
 @app.teardown_appcontext
